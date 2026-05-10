@@ -19,11 +19,14 @@ public class ItemController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll([FromQuery] int? first)
     {
-        _logger.LogInformation("GET api/item called");
+        if (first == null)
+            _logger.LogInformation("GET api/item called");
+        else
+            _logger.LogInformation("GET api/item?first={First} called", first);
 
-        var itemsEnum = await _service.GetAllAsync();
+        var itemsEnum = await _service.GetAllAsync(first);
         var items = itemsEnum.ToList();
 
         _logger.LogInformation("Retrieved {Count} items", items.Count);

@@ -24,9 +24,20 @@ public class ItemService : IItemService
 
         return item;
     }
-    public async Task<IEnumerable<Item>> GetAllAsync()
+    public async Task<IEnumerable<Item>> GetAllAsync(int? first)
     {
         var items = await _repository.GetAllAsync();
+
+        if (first != null)
+        {
+            if (first <= 0)
+            {
+                throw new BadHttpRequestException($"First {first} must be a positive integer.");
+            }
+
+            items = items.Where(item => item.Value >= 5).OrderBy(item => item.Value).Take(first.Value);
+        }
+
         return items;
     }
 }
