@@ -361,3 +361,13 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/Siemens.Internship2026.GradeBook/appsettings.Development.json
+/Siemens.Internship2026.GradeBook/appsettings.json
+/Siemens.Internship2026.GradeBook/Controllers/ItemController.cs
+/Siemens.Internship2026.GradeBook/Interfaces/IItemReader.cs
+/Siemens.Internship2026.GradeBook/Models/Item.cs
+/Siemens.Internship2026.GradeBook/Program.cs
+/Siemens.Internship2026.GradeBook/Properties/launchSettings.json
+/Siemens.Internship2026.GradeBook/Repositories/ItemRepository.cs
+/Siemens.Internship2026.GradeBook/Siemens.Internship2026.GradeBook.csproj
+/Siemens.Internship2026.GradeBook/Siemens.Internship2026.GradeBook.sln
