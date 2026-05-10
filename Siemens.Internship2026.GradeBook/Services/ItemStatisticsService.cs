@@ -4,7 +4,7 @@ using Siemens.Internship2026.GradeBook.Models;
 
 namespace Siemens.Internship2026.GradeBook.Services;
 
-public class ItemStatisticsService
+public class ItemStatisticsService : IItemStatisticsService
 {
     private readonly IRepository _repository;
     public ItemStatisticsService(IRepository repository)
