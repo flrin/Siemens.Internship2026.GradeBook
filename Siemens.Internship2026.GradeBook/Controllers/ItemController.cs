@@ -9,10 +9,10 @@ namespace Siemens.Internship2026.GradeBook.Controllers;
 [Route("api/[controller]")]
 public class ItemController : ControllerBase
 {
-    private readonly ItemService _service;
+    private readonly IItemService _service;
     private readonly ILogger<ItemController> _logger;
 
-    public ItemController(ItemService service, ILogger<ItemController> logger)
+    public ItemController(IItemService service, ILogger<ItemController> logger)
     {
         _service = service;
         _logger = logger;
