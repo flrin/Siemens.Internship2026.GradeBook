@@ -6,10 +6,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-builder.Services.AddScoped<IItemRepository, ItemRepository>();
-builder.Services.AddScoped<IItemStatisticsRepository, ItemRepository>();
 builder.Services.AddScoped<IItemService, ItemService>();
 builder.Services.AddScoped<IItemStatisticsService, ItemStatisticsService>();
+
+builder.Services.AddHttpClient<IItemStatisticsRepository, ExternalEndpointItemRepository>();
+builder.Services.AddHttpClient<IItemRepository,ExternalEndpointItemRepository>();
 
 var app = builder.Build();
 
