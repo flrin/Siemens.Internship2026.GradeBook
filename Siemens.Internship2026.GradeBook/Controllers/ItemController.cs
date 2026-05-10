@@ -28,10 +28,7 @@ public class ItemController : ControllerBase
 
         _logger.LogInformation("Retrieved {Count} items", items.Count);
 
-        return Ok(new
-        {
-            Data = items
-        });
+        return Ok(items);
     }
 
     [HttpGet("{id}")]
@@ -42,14 +39,16 @@ public class ItemController : ControllerBase
         try
         {
             var item = await _service.GetByIdAsync(id);
+
+            if (item == null)
+            {
+                _logger.LogWarning("Item with ID {Id} not found", id);
+                return NotFound($"Item with Id {id} was not found.");
+            }
+
             _logger.LogInformation("Retrieved item with ID {Id}: {@Item}", id, item);
             return Ok(item);
 
-        }
-        catch (KeyNotFoundException ex)
-        {
-            _logger.LogWarning("Item with ID {Id} not found: {Message}", id, ex.Message);
-            return NotFound(ex.Message);
         }
         catch (BadHttpRequestException ex)
         {

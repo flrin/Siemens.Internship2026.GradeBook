@@ -6,7 +6,7 @@ using System.Reflection.PortableExecutable;
 namespace Siemens.Internship2026.GradeBook.Controllers;
 
 [ApiController]
-[Route("api/statistics/[controller]")]
+[Route("api/statistics")]
 public class ItemStatisticsController : ControllerBase
 {
     private readonly IItemStatisticsService _service;

@@ -6,8 +6,8 @@ namespace Siemens.Internship2026.GradeBook.Services;
 
 public class ItemService : IItemService
 {
-    private readonly IRepository _repository;
-    public ItemService(IRepository repository)
+    private readonly IItemRepository _repository;
+    public ItemService(IItemRepository repository)
     {
         _repository = repository;
     }
@@ -21,11 +21,6 @@ public class ItemService : IItemService
         }
 
         var item = await _repository.GetByIdAsync(id);
-
-        if (item == null)
-        {
-            throw new KeyNotFoundException($"Item with Id {id} was not found.");
-        }
 
         return item;
     }

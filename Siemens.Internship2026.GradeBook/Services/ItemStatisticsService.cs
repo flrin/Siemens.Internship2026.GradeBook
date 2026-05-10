@@ -6,8 +6,8 @@ namespace Siemens.Internship2026.GradeBook.Services;
 
 public class ItemStatisticsService : IItemStatisticsService
 {
-    private readonly IRepository _repository;
-    public ItemStatisticsService(IRepository repository)
+    private readonly IItemStatisticsRepository _repository;
+    public ItemStatisticsService(IItemStatisticsRepository repository)
     {
         _repository = repository;
     }
