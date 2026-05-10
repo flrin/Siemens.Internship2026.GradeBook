@@ -3,7 +3,7 @@ using Siemens.Internship2026.GradeBook.Models;
 
 namespace Siemens.Internship2026.GradeBook.Repositories;
 
-public class ItemRepository : IItemReader
+public class ItemRepository : IRepository
 {
     protected readonly List<Item> _items = new();
     protected int _nextId = 1;
@@ -18,5 +18,17 @@ public class ItemRepository : IItemReader
     {
         var items = _items.Where(i => i.IsActive).AsEnumerable();
         return Task.FromResult(items);
+    }
+
+    public Task<int> GetItemTotalCountAsync()
+    {
+        var itemCount = _items.Count();
+        return Task.FromResult(itemCount);
+    }
+
+    public Task<decimal> GetAverageItemValueAsync()
+    {
+        var itemAverageValue = _items.Any() ? _items.Average(i => i.Value) : 0;
+        return Task.FromResult(itemAverageValue);
     }
 }

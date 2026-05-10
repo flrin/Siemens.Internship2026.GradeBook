@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Siemens.Internship2026.GradeBook.Interfaces;
+using Siemens.Internship2026.GradeBook.Services;
+using Microsoft.Extensions.Logging;
 
 namespace Siemens.Internship2026.GradeBook.Controllers;
 
@@ -7,56 +9,53 @@ namespace Siemens.Internship2026.GradeBook.Controllers;
 [Route("api/[controller]")]
 public class ItemController : ControllerBase
 {
-    private readonly IItemReader _reader;
+    private readonly ItemService _service;
+    private readonly ILogger<ItemController> _logger;
 
-    public ItemController(IItemReader reader)
+    public ItemController(ItemService service, ILogger<ItemController> logger)
     {
-        _reader = reader;
+        _service = service;
+        _logger = logger;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        Console.WriteLine($"[LOG] {DateTime.UtcNow}: GET api/item called");
+        _logger.LogInformation("GET api/item called");
 
-        var items = await _reader.GetAllAsync();
-        var itemList = items.ToList();
+        var itemsEnum = await _service.GetAllAsync();
+        var items = itemsEnum.ToList();
 
-        var totalCount = itemList.Count;
-        var averageValue = itemList.Any() ? itemList.Average(i => i.Value) : 0;
-
-        Console.WriteLine($"[LOG] Returning {totalCount} items, average value: {averageValue}");
+        _logger.LogInformation("Retrieved {Count} items", items.Count);
 
         return Ok(new
         {
-            Data = itemList,
-            Statistics = new
-            {
-                TotalCount = totalCount,
-                AverageValue = averageValue,
-                RetrievedAt = DateTime.UtcNow
-            }
+            Data = items
         });
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
-        Console.WriteLine($"[LOG] {DateTime.UtcNow}: GET api/item/{id} called");
+        _logger.LogInformation("GET api/item/{Id} called", id);
 
-        if (id <= 0)
+        try
         {
-            Console.WriteLine($"[LOG] Invalid id: {id}");
-            return BadRequest("Id must be a positive integer.");
+            var item = await _service.GetByIdAsync(id);
+            _logger.LogInformation("Retrieved item with ID {Id}: {@Item}", id, item);
+            return Ok(item);
+
+        }
+        catch (KeyNotFoundException ex)
+        {
+            _logger.LogWarning("Item with ID {Id} not found: {Message}", id, ex.Message);
+            return NotFound(ex.Message);
+        }
+        catch (BadHttpRequestException ex)
+        {
+            _logger.LogError("Bad request for item with ID {Id}: {Message}", id, ex.Message);
+            return BadRequest(ex.Message);
         }
 
-        var item = await _reader.GetByIdAsync(id);
-        if (item == null)
-        {
-            Console.WriteLine($"[LOG] Item {id} not found");
-            return NotFound($"Item with Id {id} was not found.");
-        }
-
-        return Ok(item);
     }
 }
